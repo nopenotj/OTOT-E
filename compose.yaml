@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/mock_data:/data
+    environment:
+      - 'POSTGRES_PASSWORD=asdf'
+    ports:
+      - 5432:5432
+  web:
+    build: ./web
+    environment:
+      - 'DB_HOST=db'
+      - 'REDIS_HOST=redis'
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./web/main.js:/app/main.js
+  redis:
+    image: redis
+
